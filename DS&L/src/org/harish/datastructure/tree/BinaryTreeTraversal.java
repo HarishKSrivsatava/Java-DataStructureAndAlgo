@@ -1,14 +1,17 @@
 package org.harish.datastructure.tree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
-public class BinaryTree {
+public class BinaryTreeTraversal {
+
 		public BTNode root;
-		public BinaryTree(){
+		public BinaryTreeTraversal(){
 			root = null;
 		}
-		public BinaryTree(int data){
+		public BinaryTreeTraversal(int data){
 			root = new BTNode(data);
 		}
 		
@@ -60,5 +63,50 @@ public class BinaryTree {
 			}
 			return listOfData;
 		}
-	
+		
+		public ArrayList<Integer> postOrderTraversalIterative(BTNode node){
+			ArrayList<Integer> listOfData = new ArrayList<>();
+		    if(node == null){
+		    	return listOfData;
+		    }	
+		    Stack<BTNode> nodeStack = new Stack<>();
+		    nodeStack.push(node);
+		    while(!nodeStack.isEmpty()){
+		    	BTNode currentNode = nodeStack.peek();
+		    	// TODO
+		    }
+		    return listOfData;
+		}	
+		
+		public ArrayList<ArrayList<Integer>> levelOrderTraversal(BTNode root){
+			ArrayList<ArrayList<Integer>> listOfData = new ArrayList<>();
+			/*1. Visit the root
+			2. While traversal level L , keep all the elements at level L+1 in queue
+			3. Go to the next level and visit all the nodes at that level
+			4. Repeat until all the levels are completed
+			*/
+			if (root == null)
+				return listOfData;
+			Queue<BTNode> nodeQueue = new LinkedList<>();
+			nodeQueue.offer(root);
+			nodeQueue.offer(null);
+			ArrayList<Integer> curr = new ArrayList<>();
+			while(!nodeQueue.isEmpty()){
+				BTNode temp = nodeQueue.poll();
+				if(temp != null){
+					curr.add(temp.getData());
+					if(null != temp.getLeft())
+						nodeQueue.offer(temp.getLeft());
+					if(null != temp.getRight())
+						nodeQueue.offer(temp.getRight());
+				}else{
+					ArrayList<Integer> cu_curr = new ArrayList<>(curr);
+					listOfData.add(cu_curr);
+					curr.clear();
+					if(!nodeQueue.isEmpty())
+						nodeQueue.offer(null);
+				}
+			}
+			return listOfData;
+		}
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class BinaryTreeTest {
 	
 	public static void main(String[] args) {
-		BinaryTree bt = new BinaryTree();
+		BinaryTreeTraversal bt = new BinaryTreeTraversal();
 		// create root node
 		bt.root = new BTNode(1);
 		 /* following is the tree after above statement 
@@ -43,5 +43,20 @@ public class BinaryTreeTest {
 			System.out.print(item + " ");
 		}
 		
+		/* TODO
+		System.out.print("\nPostorder Traversal(Iterative) :");
+		ArrayList<Integer> postOrderTraversalIterative = bt.postOrderTraversalIterative(bt.root);
+		for (Integer item : postOrderTraversalIterative) {
+			System.out.print(item + " ");
+		}*/
+		
+		System.out.print("\nLevelOrder Traversal(Iterative) :");
+		ArrayList<ArrayList<Integer>> levelOrderTraversal = bt.levelOrderTraversal(bt.root);
+	    for (ArrayList<Integer> outer : levelOrderTraversal) {
+	    	for (Integer inner : outer) {
+				System.out.print(inner + " ");
+			}
+			
+		}
 	}
 }
