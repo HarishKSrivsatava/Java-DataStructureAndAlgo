@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class BinaryTreeTest {
 	
 	public static void main(String[] args) {
+		System.out.println("Hello");
 		BinaryTreeTraversal bt = new BinaryTreeTraversal();
 		// create root node
 		bt.root = new BTNode(1);
