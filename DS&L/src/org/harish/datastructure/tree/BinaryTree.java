@@ -7,7 +7,7 @@ import java.util.Stack;
 
 public class BinaryTree {
 	
-	private BTNode root;
+	private static BTNode root;
 	public BTNode generateBinaryTree(){
 	// create root node
 	root = new BTNode(1);
@@ -38,6 +38,34 @@ public class BinaryTree {
 		if(root.getData() == data)
 			return true;
 		return searchInBT(root.getLeft(),data) || searchInBT(root.getRight(), data);
+	}
+	
+	/**
+	 * 
+	 * @param root
+	 * @param data
+	 * @return
+	 */
+	public boolean serachInBTIterative(BTNode root, int data){
+		System.out.println("Searched element : "+ data);
+		if(root == null)
+			return false;
+		if(root.getData() == data)
+			return true;
+		Queue<BTNode> nodesInQueue = new LinkedList<>();
+		nodesInQueue.offer(root);
+		while(!nodesInQueue.isEmpty()){
+			BTNode tempNode = nodesInQueue.poll();
+			if(tempNode.getData() == data)
+				return true;
+			if(null != tempNode){
+				if(null != tempNode.getLeft())
+					nodesInQueue.offer(tempNode.getLeft());
+				if(null != tempNode.getRight())
+					nodesInQueue.offer(tempNode.getRight());
+			}
+		}
+		return false;
 	}
 	/**
 	 * 
@@ -158,6 +186,105 @@ public class BinaryTree {
 		}
 		return listOfData;
 	}
+	
+	
+	public BTNode insertNode(BTNode root, int data){
+	  /* Since this is a binary tree we can insert the given node anywhere wherever
+         we find any existing node whose either of child is null.
+         Now to find such node we can use level order traversal of tree.
+         */
+		if(root == null)
+			return null;
+		Queue<BTNode> nodes = new LinkedList<>();
+		nodes.offer(root);
+		while(!nodes.isEmpty()){
+			BTNode temp = nodes.poll();
+			if(temp != null){
+				if(temp.getLeft() != null){
+					nodes.offer(temp.getLeft());
+				}else{
+					BTNode newNode = new BTNode(data);
+					temp.setLeft(newNode);
+					return root;
+				}
+				if(temp.getRight() != null){
+					nodes.offer(temp.getRight());
+				}else{
+					BTNode newNode = new BTNode(data);
+					temp.setRight(newNode);
+					return root;
+				}
+			}
+		}
+		return root;
+	}
+	
+	public void insertNodeRecursive(BTNode root, int data){
+		 /* Since this is a binary tree we can insert the given node anywhere wherever
+        we find any existing node whose either of child is null.
+        Now to find such node we can use level order traversal of tree.
+        */
+        if(root == null){
+        	 root = new BTNode(data);
+        }else{
+        	 insertHelper(root, data);
+        }
+	}
+	
+	private void insertHelper(BTNode root, int data) {
+		
+		if(root.getData() >= data){
+    		if(null != root.getLeft()){
+    			insertHelper(root.getLeft(),data);
+    		}else{
+    			root.setLeft(new BTNode(data));
+    		}
+		}else{
+    		if(null != root.getRight()){
+    			insertHelper(root.getRight(),data);
+    		}else{
+    			root.setRight(root.getRight());
+    		}
+		}
+	}
+
+	
+	public int size(BTNode root){
+		int size = Integer.MIN_VALUE;
+		if(root == null)
+			return size;
+		int leftSubTreeSize = (root.getLeft() == null) ? 0 : size(root.getLeft());
+		int rightSubTreeSize = (root.getRight() == null) ? 0 : size(root.getRight());
+		return 1+leftSubTreeSize+rightSubTreeSize;
+	}
+
+	
+	public int sizeIterative(BTNode root){
+		int size = 0;
+		if(root == null)
+			return size;
+		// Do the level order traversal and count the left and right child of every nodes at that level
+		Queue<BTNode> nodeQueue = new LinkedList<>();
+		nodeQueue.offer(root);
+		++size;
+		while(!nodeQueue.isEmpty()){
+			BTNode tempNode = nodeQueue.poll();
+			if(null != tempNode){
+				if(tempNode.getLeft() != null){
+					++size;
+					nodeQueue.offer(tempNode.getLeft());
+				}
+				if(tempNode.getRight() != null){
+					++size;
+					nodeQueue.offer(tempNode.getRight());
+				}
+					
+			}
+		}
+		return size;
+		
+		
+	}
 	/**
 	 * 
 	 * @param args
@@ -165,8 +292,11 @@ public class BinaryTree {
 	public static void main(String[] args) {
 		BinaryTree binaryTree = new BinaryTree();
 		BTNode binaryTreeRootNode = binaryTree.generateBinaryTree();
-		ArrayList<Integer> preOrderTraversalIterative = binaryTree.preOrderTraversalIterative(binaryTreeRootNode);
+		
+		
+		System.out.println("\n================= Output console ====================");
 		System.out.print("PreOrder Traversal : " );
+		ArrayList<Integer> preOrderTraversalIterative = binaryTree.preOrderTraversalIterative(binaryTreeRootNode);
 		for (Integer item : preOrderTraversalIterative) {
 			System.out.print(item + " ");
 		}
@@ -175,7 +305,9 @@ public class BinaryTree {
 		for (Integer item : postOrderTraversalIterative) {
 			System.out.print(item + " ");
 		}*/
-		System.out.print("\nLevelOrder Traversal : " );
+		
+		System.out.println("\n=====================================================");
+		System.out.print("LevelOrder Traversal : " );
 		ArrayList<ArrayList<Integer>> levelOrderTraversal = binaryTree.levelOrderTraversal(binaryTreeRootNode);
 		for (ArrayList<Integer> arrayList : levelOrderTraversal) {
 			for (Integer item : arrayList) {
@@ -183,9 +315,41 @@ public class BinaryTree {
 			}
 			
 		}
+		System.out.println("\n=====================================================");
+		System.out.println("Search in Binary Tree (Recursion):");
+		int searchElement = 5;
+		System.out.println("Is searched element "+ searchElement+" found ? " + binaryTree.searchInBT(binaryTreeRootNode, searchElement));
+		System.out.println("\nSearch in Binary Tree (Iteration):");
+		System.out.print("Is element found ? " + binaryTree.serachInBTIterative(binaryTreeRootNode, searchElement));
+		System.out.println("\n=====================================================");
 		
-		System.out.println("\nSearch in Binary Tree :");
-		System.out.print("Is element found ? " + binaryTree.searchInBT(binaryTreeRootNode, 5));
+		System.out.println("\n=====================================================");
+		System.out.println("Insert in Binary Tree (Recursive) :");
+		 binaryTree.insertNode(binaryTreeRootNode,6);
+		ArrayList<Integer> t1 = binaryTree.preOrderTraversalIterative(binaryTreeRootNode);
+		for (Integer item : t1) {
+			System.out.print(item + " ");
+		}
+		/*
+		System.out.println("\n=====================================================");
+		System.out.println("Insert in Binary Tree (Iterative):");
+		binaryTree.insertNodeRecursive(binaryTreeRootNode,7);
+		ArrayList<Integer> t2 = binaryTree.preOrderTraversalIterative(binaryTreeRootNode);
+		for (Integer item : t2) {
+			System.out.print(item + " ");
+		}*/
+		
+		
+		System.out.println("\n=====================================================");
+		System.out.println("Size of Binary Tree (Recursion):");
+		System.out.print(binaryTree.size(binaryTreeRootNode));
+		
+		
+		System.out.println("\n=====================================================");
+		System.out.println("Size of Binary Tree (Iteration):");
+		System.out.print(binaryTree.sizeIterative(binaryTreeRootNode));
+		
+		
 		
 	}
 	
