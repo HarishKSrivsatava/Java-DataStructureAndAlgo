@@ -65,7 +65,6 @@ public class DFS {
 	    }
 
 	}
-
 	// reset flag
 	for (int i = 0; i < vertexCount; i++) {
 	    vertexList[i].visited = false;
@@ -85,19 +84,23 @@ public class DFS {
     public static void main(String[] args) {
 	DFS graph = new DFS();
 	// Adding vertices of graph
-	graph.addVertex('A');
-	graph.addVertex('B');
-	graph.addVertex('C');
-	graph.addVertex('D');
+	graph.addVertex('A'); // At index 0
+	graph.addVertex('B'); // At index 1
+	graph.addVertex('C'); // At index 2
+	graph.addVertex('D'); // At index 3
+	graph.addVertex('E'); // At index 4
 	// Adding vertices of graph
-	graph.addEdge(0, 1);
-	graph.addEdge(0, 3);
-	graph.addEdge(1, 2);
-	graph.addEdge(2, 0);
-	graph.addEdge(2, 3);
+	graph.addEdge(0, 1); // Edge A -- B
+	graph.addEdge(0, 3); // Edge A -- D
+	graph.addEdge(1, 2); // Edge B -- C
+	graph.addEdge(2, 0); // Edge C -- A
+	graph.addEdge(2, 3); // Edge C -- D
+	graph.addEdge(1, 4); // Edge B -- E
+	graph.addEdge(2, 4); // Edge C -- E
 
+	System.out.println("======== Depth Search Search (DFS) ========");
 	graph.dfs();
-
+	System.out.print("\n===========================================");
     }
 
 }
